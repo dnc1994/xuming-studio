@@ -9,19 +9,14 @@
       --bg-1: #efe3c8;
       --bg-2: #d7b46a;
       --ink: #1d1a15;
-      --card: rgba(255, 247, 226, 0.88);
+      --card: rgba(255, 247, 226, 0.9);
       --accent: #a50f15;
       --accent-2: #0f5d2f;
+      --gold: #c98a00;
       --muted: #5c5548;
       --line: rgba(29, 26, 21, 0.16);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       min-height: 100vh;
       font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", serif;
@@ -31,199 +26,123 @@
         radial-gradient(circle at 85% 80%, rgba(15, 93, 47, 0.1), transparent 38%),
         linear-gradient(140deg, var(--bg-1), var(--bg-2));
       padding: 24px;
+      overflow-x: hidden;
     }
+    body.frenzy { animation: frenzyBg 1.2s ease-in-out infinite alternate; }
+    @keyframes frenzyBg { from { filter: saturate(1); } to { filter: saturate(1.5) hue-rotate(-8deg); } }
 
-    .wrap {
-      max-width: 1060px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 16px;
-    }
-
+    .wrap { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 16px; }
     .panel {
-      border: 1px solid var(--line);
-      background: var(--card);
-      border-radius: 14px;
-      padding: 16px;
-      backdrop-filter: blur(2px);
+      border: 1px solid var(--line); background: var(--card); border-radius: 14px; padding: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     }
+    h1 { font-size: 30px; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+    .big-number { font-size: clamp(32px, 5.4vw, 58px); line-height: 1.05; font-weight: 800; transition: transform 80ms; font-variant-numeric: tabular-nums; }
+    .big-number.pop { transform: scale(1.04); }
+    .resource-label { color: var(--muted); margin: 4px 0 12px; font-size: 14px; }
+    .resource-label b { color: var(--accent); }
 
-    h1 {
-      font-size: 30px;
-      letter-spacing: 0.04em;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .big-number {
-      font-size: clamp(30px, 5vw, 54px);
-      line-height: 1.05;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .resource-label {
-      color: var(--muted);
-      margin-bottom: 14px;
-      font-size: 14px;
-    }
-
+    .click-wrap { position: relative; }
     .click-btn {
-      width: 100%;
-      border: none;
-      cursor: pointer;
-      border-radius: 12px;
-      padding: 18px;
-      font-size: clamp(20px, 3.4vw, 28px);
-      font-weight: 700;
-      color: #fff5dc;
+      width: 100%; border: none; cursor: pointer; border-radius: 12px; padding: 20px 18px 16px;
+      font-size: clamp(20px, 3.4vw, 28px); font-weight: 800; color: #fff5dc;
       background: linear-gradient(120deg, var(--accent), #c5262c);
       box-shadow: 0 10px 0 #7b0b11, 0 12px 20px rgba(123, 11, 17, 0.24);
-      transition: transform 120ms ease, box-shadow 120ms ease;
+      transition: transform 90ms ease, box-shadow 90ms ease, filter 200ms;
+      user-select: none; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
     }
+    .click-btn small { display: block; font-size: 13px; font-weight: 500; opacity: 0.85; margin-top: 4px; }
+    .click-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 #7b0b11; }
+    .click-btn.hot { filter: saturate(1.4) brightness(1.08); }
+    .click-btn.silent { filter: grayscale(0.7); }
+    .combo-bar { position: absolute; left: 0; bottom: 0; height: 5px; background: #ffd34d; width: 0; transition: width 120ms; }
+    .float {
+      position: fixed; pointer-events: none; font-weight: 800; color: var(--accent); z-index: 50;
+      text-shadow: 0 1px 0 #fff8e6; animation: floatUp 900ms ease-out forwards; white-space: nowrap;
+    }
+    .float.crit { color: var(--gold); font-size: 1.4em; }
+    @keyframes floatUp { from { opacity: 1; transform: translate(-50%, 0) scale(1); } to { opacity: 0; transform: translate(-50%, -70px) scale(1.15); } }
 
-    .click-btn:active {
-      transform: translateY(5px);
-      box-shadow: 0 5px 0 #7b0b11;
-    }
+    .stats { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .stat { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: rgba(255,255,255,0.45); }
+    .stat .k { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .stat .v { font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums; }
 
-    .stats {
-      margin-top: 16px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
+    .journey { margin-top: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: rgba(255,255,255,0.45); }
+    .journey .row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .journey .row b { color: var(--ink); }
+    .bar { height: 8px; border-radius: 99px; background: rgba(0,0,0,0.08); overflow: hidden; }
+    .bar > div { height: 100%; background: linear-gradient(90deg, var(--accent-2), #3fb36b); width: 0; transition: width 250ms; }
 
-    .stat {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.45);
-    }
+    .buffs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; min-height: 26px; }
+    .buff { font-size: 12px; padding: 4px 8px; border-radius: 99px; background: var(--ink); color: #fff3d0; font-weight: 700; }
+    .buff.gold { background: var(--gold); }
 
-    .stat .k {
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 4px;
+    .log { margin-top: 10px; border: 1px dashed var(--line); border-radius: 10px; padding: 10px; background: rgba(255,255,255,0.38); height: 170px; overflow: auto; font-size: 13px; line-height: 1.55; color: #3d372e; }
+    .log .hl { color: var(--accent); font-weight: 700; }
+    .log .story { color: var(--accent-2); font-weight: 700; }
+    .toolbar { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .toolbar button, .seg button {
+      border: 1px solid var(--line); background: rgba(255,255,255,0.55); border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; font-size: 13px;
     }
+    .toolbar .prestige { background: var(--ink); color: #ffe7a3; font-weight: 700; display: none; }
 
-    .stat .v {
-      font-weight: 700;
-      font-size: 18px;
-    }
+    .shop-title { display: flex; justify-content: space-between; align-items: center; margin: 2px 0 10px; gap: 8px; }
+    .shop-title h2 { font-size: 22px; }
+    .seg { display: flex; gap: 4px; }
+    .seg button.on { background: var(--ink); color: #fff3d0; }
+    .section-label { font-size: 12px; color: var(--muted); margin: 12px 0 6px; letter-spacing: 0.1em; }
+    .list { display: grid; gap: 8px; }
+    .scroll { max-height: calc(100vh - 140px); overflow: auto; padding-right: 4px; }
 
-    .shop-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 12px;
+    .card { border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,0.5); padding: 9px 10px; display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+    .card .name { font-size: 15px; font-weight: 700; }
+    .card .name .lv { color: var(--muted); font-weight: 500; font-size: 13px; margin-left: 4px; }
+    .card .desc { color: var(--muted); font-size: 12.5px; line-height: 1.4; grid-column: 1; }
+    .card .sub { font-size: 12px; color: var(--accent-2); grid-column: 1; }
+    .card button {
+      grid-row: 1 / span 3; grid-column: 2; border: none; border-radius: 8px; padding: 8px 10px; font-weight: 700; cursor: pointer; min-width: 92px;
+      background: linear-gradient(120deg, var(--accent-2), #1e8f4b); color: #f4ffe9; font: inherit; font-size: 13px; line-height: 1.3;
     }
+    .card button:disabled { cursor: not-allowed; background: #8f8b84; color: #dfd9cf; }
+    .card.locked { opacity: 0.55; }
+    .card.locked .name { letter-spacing: 0.2em; }
+    .card.project { border-color: rgba(165,15,21,0.35); background: rgba(255,240,220,0.7); }
+    .card.project button { background: linear-gradient(120deg, var(--accent), #c5262c); }
+    .card.flash { animation: flash 500ms; }
+    @keyframes flash { from { background: #fff3b0; } to { background: rgba(255,255,255,0.5); } }
 
-    .shop-title h2 {
-      font-size: 24px;
+    .reporter {
+      position: fixed; z-index: 40; cursor: pointer; border: 2px solid var(--ink); background: #fff2b3; color: var(--ink);
+      border-radius: 14px; padding: 10px 14px; font-weight: 800; font-size: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      animation: bob 0.9s ease-in-out infinite alternate, appear 300ms ease-out; user-select: none;
     }
+    .reporter small { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+    @keyframes bob { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-8px) rotate(2deg); } }
+    @keyframes appear { from { opacity: 0; scale: 0.4; } to { opacity: 1; scale: 1; } }
 
-    .shop-title span {
-      color: var(--muted);
-      font-size: 12px;
+    .toast {
+      position: fixed; left: 50%; top: 18%; transform: translateX(-50%); z-index: 60; pointer-events: none;
+      font-size: clamp(30px, 6vw, 64px); font-weight: 900; color: var(--accent); text-align: center;
+      text-shadow: 0 3px 0 #fff3d0, 0 6px 18px rgba(0,0,0,0.25); animation: toast 2.2s ease-out forwards; white-space: nowrap;
     }
+    .toast small { display: block; font-size: 0.32em; color: var(--ink); text-shadow: none; font-weight: 700; margin-top: 6px; }
+    @keyframes toast { 0% { opacity: 0; transform: translateX(-50%) scale(0.5); } 12% { opacity: 1; transform: translateX(-50%) scale(1.08); } 20% { transform: translateX(-50%) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateX(-50%) translateY(-30px); } }
 
-    .upgrade-list {
-      display: grid;
-      gap: 10px;
-      max-height: 520px;
-      overflow: auto;
-      padding-right: 4px;
-    }
-
-    .upgrade {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.5);
-      padding: 10px;
-    }
-
-    .upgrade .name {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .upgrade .desc {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
-
-    .upgrade .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .upgrade button {
-      border: none;
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-weight: 700;
-      cursor: pointer;
-      background: linear-gradient(120deg, var(--accent-2), #1e8f4b);
-      color: #f4ffe9;
-    }
-
-    .upgrade button:disabled {
-      cursor: not-allowed;
-      background: #8f8b84;
-      color: #dfd9cf;
-    }
-
-    .log {
-      margin-top: 16px;
-      border: 1px dashed var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.38);
-      min-height: 120px;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #3d372e;
-    }
-
-    .toolbar {
-      margin-top: 10px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .toolbar button {
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.55);
-      border-radius: 8px;
-      padding: 6px 10px;
-      cursor: pointer;
-    }
+    .modal-bg { position: fixed; inset: 0; background: rgba(20,16,10,0.6); z-index: 70; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-bg.show { display: flex; }
+    .modal { max-width: 520px; background: #fff7e2; border-radius: 16px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .modal h3 { font-size: 24px; margin-bottom: 10px; }
+    .modal p { color: #3d372e; line-height: 1.7; margin-bottom: 10px; font-size: 15px; }
+    .modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+    .modal button { border: none; border-radius: 8px; padding: 9px 14px; font: inherit; font-weight: 700; cursor: pointer; background: #ddd3bd; }
+    .modal button.primary { background: var(--accent); color: #fff5dc; }
 
     @media (max-width: 900px) {
-      body {
-        padding: 14px;
-      }
-
-      .wrap {
-        grid-template-columns: 1fr;
-      }
-
-      .upgrade-list {
-        max-height: none;
-      }
+      body { padding: 12px; }
+      .wrap { grid-template-columns: 1fr; }
+      .scroll { max-height: none; }
     }
   </style>
 </head>
@@ -231,362 +150,712 @@
   <div class="wrap">
     <section class="panel">
       <h1>续命工坊：膜蛤版</h1>
-      <p class="subtitle">点击续一秒，靠梗文化升级，目标是把可用寿命推到天文数字。</p>
+      <p class="subtitle">点击续一秒，靠梗文化升级。终极目标：给整个宇宙续上一秒。</p>
 
       <div id="lifeAmount" class="big-number">0 秒</div>
-      <div class="resource-label">当前可支配续命秒数</div>
+      <div class="resource-label" id="lifeHuman">当前可支配续命秒数</div>
 
-      <button id="clickBtn" class="click-btn">+1 秒 · 立即续命</button>
-
-      <div class="stats">
-        <div class="stat">
-          <div class="k">总续命</div>
-          <div id="totalLife" class="v">0 秒</div>
-        </div>
-        <div class="stat">
-          <div class="k">手动续命/次</div>
-          <div id="clickPower" class="v">1.00 秒</div>
-        </div>
-        <div class="stat">
-          <div class="k">自动续命/秒</div>
-          <div id="autoRate" class="v">0.00 秒</div>
-        </div>
-        <div class="stat">
-          <div class="k">全局倍率</div>
-          <div id="globalMultiplier" class="v">x1.00</div>
-        </div>
+      <div class="click-wrap">
+        <button id="clickBtn" class="click-btn">
+          <span id="clickLabel">+1 秒 · 立即续命</span>
+          <small id="comboLabel">连点可以叠连击</small>
+          <div class="combo-bar" id="comboBar"></div>
+        </button>
       </div>
 
+      <div class="stats">
+        <div class="stat"><div class="k">手动续命/次</div><div id="clickPower" class="v">1 秒</div></div>
+        <div class="stat"><div class="k">自动续命/秒</div><div id="autoRate" class="v">0 秒</div></div>
+        <div class="stat"><div class="k">全局倍率</div><div id="globalMultiplier" class="v">x1.00</div></div>
+        <div class="stat"><div class="k">历史的行程</div><div id="historyStat" class="v">尚未开启</div></div>
+      </div>
+
+      <div class="journey">
+        <div class="row"><span>历代总续命 <b id="allTime">0 秒</b></span><span>下一站：<b id="nextStop">一分钟</b></span></div>
+        <div class="bar"><div id="journeyBar"></div></div>
+      </div>
+
+      <div class="buffs" id="buffs"></div>
       <div class="log" id="logBox"></div>
       <div class="toolbar">
         <button id="saveBtn">立刻保存</button>
-        <button id="resetBtn">重开轮回</button>
+        <button id="prestigeBtn" class="prestige">推进历史的行程</button>
+        <button id="resetBtn">删档重来</button>
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel scroll">
       <div class="shop-title">
         <h2>梗学研究所</h2>
-        <span>花费续命秒数购买升级</span>
+        <div class="seg" id="buyAmt">
+          <button data-n="1" class="on">x1</button><button data-n="10">x10</button><button data-n="max">Max</button>
+        </div>
       </div>
-      <div id="upgradeList" class="upgrade-list"></div>
+      <div id="projectWrap" style="display:none">
+        <div class="section-label">研究课题 · 一次性</div>
+        <div id="projectList" class="list"></div>
+      </div>
+      <div class="section-label">增幅</div>
+      <div id="boostList" class="list"></div>
+      <div class="section-label">续命产线</div>
+      <div id="genList" class="list"></div>
     </section>
   </div>
 
-  <script>
-    const STORAGE_KEY = "moha-clicker-save-v1";
+  <div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
 
-    const upgrades = [
-      {
-        id: "red_boy",
-        name: "红衣男孩观察团",
-        description: "围观气氛拉满，手动续命效率提升。",
-        baseCost: 12,
-        growth: 1.22,
-        unlockAt: 0,
-        effect: () => ({ clickAdd: 1.0 })
-      },
-      {
-        id: "hk_reporter",
-        name: "香港记者追问机",
-        description: "持续追问，产生稳定自动续命。",
-        baseCost: 55,
-        growth: 1.27,
-        unlockAt: 20,
-        effect: () => ({ autoAdd: 0.8 })
-      },
-      {
-        id: "hawaii_guitar",
-        name: "Hawaii Guitar 即兴课",
-        description: "节奏感上线，全局续命效率乘算提升。",
-        baseCost: 180,
-        growth: 1.35,
-        unlockAt: 120,
-        effect: () => ({ multMul: 1.12 })
-      },
-      {
-        id: "wallace",
-        name: "西方的华莱士访谈档案",
-        description: "谈笑风生，手动和自动都得到强化。",
-        baseCost: 520,
-        growth: 1.38,
-        unlockAt: 350,
-        effect: () => ({ clickAdd: 2.4, autoAdd: 1.8 })
-      },
-      {
-        id: "duck_pen",
-        name: "鸭嘴笔批注系统",
-        description: "记录效率提升，手动续命获得额外乘区。",
-        baseCost: 1350,
-        growth: 1.43,
-        unlockAt: 800,
-        effect: () => ({ clickMul: 1.2 })
-      },
-      {
-        id: "three_tables",
-        name: "三个表统计中枢",
-        description: "把增长写进三张表，自动续命暴涨。",
-        baseCost: 3800,
-        growth: 1.48,
-        unlockAt: 2200,
-        effect: () => ({ autoAdd: 7.5, multMul: 1.08 })
-      },
-      {
-        id: "basic_law",
-        name: "基本法精读班",
-        description: "你现在很熟悉流程了，整体效率大幅跃迁。",
-        baseCost: 9800,
-        growth: 1.55,
-        unlockAt: 6000,
-        effect: () => ({ multMul: 1.32 })
-      }
+  <!-- ================= 游戏逻辑（不碰 DOM，可在 node 里模拟） ================= -->
+  <script id="logic">
+    const SAVE_KEY = "moha-clicker-save-v2";
+    const OLD_SAVE_KEY = "moha-clicker-save-v1";
+    const UNIVERSE = 4.35e17;
+
+    // 自动产线：成本 1.15 递增，等级到 10/25/50/100… 时产能翻倍
+    const GENS = [
+      { id: "hk_reporter", name: "香港记者追问机", desc: "跑得比西方记者还快，持续产出续命。", cost: 15, rate: 0.1,
+        flavor: "第一批记者就位了。问题源源不断，续命也源源不断。" },
+      { id: "wallace", name: "西方的华莱士访谈档案", desc: "谈笑风生的录像带，循环播放。", cost: 100, rate: 1,
+        flavor: "华莱士的档案调出来了——比你们不知道高到哪里去了。" },
+      { id: "three_tables", name: "三个表统计中枢", desc: "把增长写进三张表，一张比一张准。", cost: 1100, rate: 8,
+        flavor: "三个表同时走字，时间被精确地记了下来。" },
+      { id: "quotes", name: "长者语录复读机", desc: "名句自动循环，每一遍都续一点。", cost: 12000, rate: 47,
+        flavor: "复读机开机。人生的经验，就是要一遍一遍地听。" },
+      { id: "studio", name: "谈笑风生演播厅", desc: "全天候直播，观众越多续得越多。", cost: 130000, rate: 260,
+        flavor: "演播厅灯亮了，台下坐满了。" },
+      { id: "world_tour", name: "西方国家巡回团", desc: "西方哪个国家没去过？那就都去一遍。", cost: 1.4e+06, rate: 1400,
+        flavor: "巡回团出发。每到一站，续命产能就多一站。" },
+      { id: "history_engine", name: "历史行程推进器", desc: "顺着历史的行程，把秒数推到下一个量级。", cost: 2e+07, rate: 7800,
+        flavor: "你开始考虑历史的行程了。" },
+      { id: "cosmos", name: "宇宙续命引擎", desc: "从个人续命升级为天体续命。", cost: 3.3e+08, rate: 44000,
+        flavor: "引擎点火。目标：宇宙的年龄。" },
+    ];
+    const DOUBLINGS = [10, 25, 50, 100, 150, 200, 300, 400, 500];
+
+    // 增幅：点击与全局倍率
+    const BOOSTS = [
+      { id: "red_boy", name: "红衣男孩观察团", desc: "每级手动续命 +1 秒（基础值）。", cost: 10, growth: 1.17 },
+      { id: "duck_pen", name: "鸭嘴笔批注系统", desc: "每级手动续命 ×1.5。", cost: 1000, growth: 3.5, unlockAt: 400 },
+      { id: "hawaii_guitar", name: "Hawaii Guitar 即兴课", desc: "每级全局倍率 ×1.1。", cost: 2000, growth: 3, unlockAt: 1000 },
+      { id: "basic_law", name: "基本法精读班", desc: "每级全局倍率 ×1.5。你现在很熟悉流程了。", cost: 1e7, growth: 8, unlockAt: 4e6 },
     ];
 
-    const storyMilestones = [
-      { at: 1, text: "续命系统启动：每次点击 +1 秒。" },
-      { at: 60, text: "蛤学入门：开始出现稳定的梗学产能。" },
-      { at: 500, text: "你已经从手工续命转向工业化续命。" },
-      { at: 5000, text: "进入高阶阶段：倍率才是硬道理。" },
-      { at: 50000, text: "你正在挑战‘续到天荒地老’的目标。" }
+    // 一次性研究课题。when: 出现条件；keep: 推进历史行程时保留
+    const PROJECTS = [
+      { id: "glasses", name: "黑框眼镜", cost: 80, when: (s) => s.runTotal >= 50,
+        desc: "戴上眼镜看得更远：每秒自动点击 1 次。", story: "眼镜戴上了。按钮开始自己被按下去。", keep: true },
+      { id: "interview", name: "记者招待会", cost: 250, when: (s) => lv(s, "hk_reporter") >= 3,
+        desc: "开放提问环节：随机出现「记者举手」，点它有惊喜。", story: "招待会开始了。注意屏幕上举手的记者。", keep: true },
+      { id: "life_exp", name: "人生经验", cost: 2000, when: (s) => s.runTotal >= 1200,
+        desc: "离线续命上限 8 小时 → 24 小时。", story: "积累了一点微小的人生经验。", keep: true },
+      { id: "faster_reporters", name: "跑得比谁都快", cost: 8000, when: (s) => lv(s, "hk_reporter") >= 25,
+        desc: "记者举手的频率翻倍。", story: "记者们的速度已经超出了预期。" },
+      { id: "gouli", name: "苟利国家生死以", cost: 50000, when: (s) => s.runTotal >= 30000,
+        desc: "每次手动点击额外获得 自动续命/秒 的 3%。", story: "下一句是什么来着？先点了再说。" },
+      { id: "mensheng", name: "闷声发大财", cost: 3e5, when: (s) => s.runTotal >= 2e5,
+        desc: "连续 30 秒不手动点击，进入闷声状态：自动续命 ×2。点一下就破功。", story: "最好的办法，是闷声发大财。" },
+      { id: "three_reps", name: "三个代表重要思想", cost: 5e6, when: (s) => lv(s, "three_tables") >= 25,
+        desc: "所有续命产线产能 ×2。", story: "三张表、三个代表，产能翻番，一切都对上了。" },
+      { id: "speed_pen", name: "鸭嘴笔速记法", cost: 2e7, when: (s) => lv(s, "duck_pen") >= 6,
+        desc: "自动点击 1 次/秒 → 10 次/秒。", story: "笔尖飞起来了。" },
+      { id: "tanxiao", name: "谈笑风生", cost: 5e7, when: (s) => lv(s, "studio") >= 10,
+        desc: "记者事件效果持续时间 ×2。", story: "跟他谈笑风生，持续得也久一点。" },
+      { id: "every_country", name: "西方哪个国家我没去过", cost: 5e9, when: (s) => lv(s, "world_tour") >= 25,
+        desc: "全局倍率 ×2。", story: "去过了，都去过了。" },
+      { id: "fate", name: "一个人的命运", cost: 2e10, when: (s) => s.runTotal >= 1e10, keep: true,
+        desc: "解锁「推进历史的行程」：重开本轮，换取永久倍率。", story: "一个人的命运，当然要靠自我奋斗，但是也要考虑到历史的行程。" },
+      { id: "excited_forever", name: "Excited 永动机", cost: 1e14, when: (s) => s.history >= 60,
+        desc: "Excited! 事件的倍率 ×7 → ×15。", story: "永远保持 excited。" },
     ];
 
-    const state = {
-      life: 0,
-      totalLife: 0,
-      clickBase: 1,
-      clickBonusAdd: 0,
-      clickBonusMul: 1,
-      autoBase: 0,
-      globalMul: 1,
-      levels: Object.fromEntries(upgrades.map((u) => [u.id, 0])),
-      milestonesSeen: {},
-      lastSaveAt: 0
-    };
+    // 用「人类尺度」标记进度
+    const STOPS = [
+      { at: 60, name: "一分钟", text: "续满一分钟。万事开头难，你已经开了头。" },
+      { at: 3600, name: "一小时", text: "续满一小时。够看一集纪录片了。" },
+      { at: 86400, name: "一天", text: "续满一天。今天多出来了。" },
+      { at: 2629800, name: "一个月", text: "续满一个月。工资都发了一轮。" },
+      { at: 31557600, name: "一年", text: "续满一年！可以再过一次生日了。" },
+      { at: 2.92e9, name: "一个人的一生", text: "续满一个人的一生（92 年）。这是一个很有象征意义的数字。" },
+      { at: 1.58e11, name: "中华五千年", text: "续满五千年。历史的行程，你都补上了。" },
+      { at: 9.5e12, name: "人类历史", text: "续满三十万年，从第一个智人续到了今天。" },
+      { at: 2.1e15, name: "恐龙灭绝至今", text: "续满六千六百万年。恐龙要是有你就好了。" },
+      { at: 1.43e17, name: "地球的年龄", text: "续满了地球的年龄。下一站，宇宙。" },
+      { at: UNIVERSE, name: "宇宙的年龄", text: "宇宙续上了一秒。" },
+    ];
 
-    const el = {
-      lifeAmount: document.getElementById("lifeAmount"),
-      totalLife: document.getElementById("totalLife"),
-      clickPower: document.getElementById("clickPower"),
-      autoRate: document.getElementById("autoRate"),
-      globalMultiplier: document.getElementById("globalMultiplier"),
-      clickBtn: document.getElementById("clickBtn"),
-      upgradeList: document.getElementById("upgradeList"),
-      logBox: document.getElementById("logBox"),
-      saveBtn: document.getElementById("saveBtn"),
-      resetBtn: document.getElementById("resetBtn")
-    };
+    const EVENT_TYPES = [
+      { id: "excited", weight: 4, title: "Excited!", sub: "自动续命 ×7，持续 30 秒" },
+      { id: "angry", weight: 3, title: "I'm angry!", sub: "手动续命 ×15，持续 15 秒，快点！" },
+      { id: "toosimple", weight: 4, title: "Too young, too simple", sub: "立刻获得一大笔续命" },
+      { id: "naive", weight: 2, title: "Sometimes naive", sub: "所有购买半价，持续 20 秒" },
+      { id: "silent", weight: 2, title: "闷声发大财", sub: "自动续命 ×5，持续 40 秒——别点按钮！", need: "mensheng" },
+    ];
 
-    function fmt(num) {
-      if (num >= 1e9) return (num / 1e9).toFixed(2) + "B";
-      if (num >= 1e6) return (num / 1e6).toFixed(2) + "M";
-      if (num >= 1e3) return (num / 1e3).toFixed(2) + "K";
-      return num.toFixed(2);
-    }
-
-    function calcClickPower() {
-      return (state.clickBase + state.clickBonusAdd) * state.clickBonusMul * state.globalMul;
-    }
-
-    function calcAutoRate() {
-      return state.autoBase * state.globalMul;
-    }
-
-    function costFor(upgrade) {
-      const lv = state.levels[upgrade.id] || 0;
-      return Math.floor(upgrade.baseCost * Math.pow(upgrade.growth, lv));
-    }
-
-    function log(text) {
-      const row = document.createElement("div");
-      row.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
-      el.logBox.prepend(row);
-      while (el.logBox.children.length > 12) {
-        el.logBox.removeChild(el.logBox.lastChild);
-      }
-    }
-
-    function applyUpgradeEffect(upgrade) {
-      const out = upgrade.effect();
-      if (out.clickAdd) state.clickBonusAdd += out.clickAdd;
-      if (out.autoAdd) state.autoBase += out.autoAdd;
-      if (out.clickMul) state.clickBonusMul *= out.clickMul;
-      if (out.multMul) state.globalMul *= out.multMul;
-    }
-
-    function renderUpgrades() {
-      el.upgradeList.innerHTML = "";
-      for (const up of upgrades) {
-        if (state.totalLife < up.unlockAt) continue;
-        const lv = state.levels[up.id] || 0;
-        const cost = costFor(up);
-        const card = document.createElement("div");
-        card.className = "upgrade";
-
-        const canBuy = state.life >= cost;
-        card.innerHTML = `
-          <div class="name">${up.name} Lv.${lv}</div>
-          <div class="desc">${up.description}</div>
-          <div class="meta">
-            <div>价格: <strong>${fmt(cost)}</strong> 秒</div>
-            <button ${canBuy ? "" : "disabled"} data-up="${up.id}">购买</button>
-          </div>
-        `;
-        el.upgradeList.appendChild(card);
-      }
-    }
-
-    function refreshUpgradeButtons() {
-      const buttons = el.upgradeList.querySelectorAll("button[data-up]");
-      for (const btn of buttons) {
-        const up = upgrades.find((u) => u.id === btn.dataset.up);
-        if (!up) continue;
-        btn.disabled = state.life < costFor(up);
-      }
-    }
-
-    function renderStats() {
-      el.lifeAmount.textContent = `${fmt(state.life)} 秒`;
-      el.totalLife.textContent = `${fmt(state.totalLife)} 秒`;
-      el.clickPower.textContent = `${fmt(calcClickPower())} 秒`;
-      el.autoRate.textContent = `${fmt(calcAutoRate())} 秒`;
-      el.globalMultiplier.textContent = `x${state.globalMul.toFixed(2)}`;
-    }
-
-    function manualClick() {
-      const gain = calcClickPower();
-      state.life += gain;
-      state.totalLife += gain;
-      checkMilestones();
-      renderStats();
-      renderUpgrades();
-    }
-
-    function buyUpgrade(id) {
-      const up = upgrades.find((u) => u.id === id);
-      if (!up) return;
-      const cost = costFor(up);
-      if (state.life < cost) return;
-
-      state.life -= cost;
-      state.levels[up.id] += 1;
-      applyUpgradeEffect(up);
-      log(`购买 ${up.name}，续命系统进一步强化。`);
-      renderStats();
-      renderUpgrades();
-    }
-
-    function checkMilestones() {
-      for (const m of storyMilestones) {
-        if (state.totalLife >= m.at && !state.milestonesSeen[m.at]) {
-          state.milestonesSeen[m.at] = true;
-          log(m.text);
-        }
-      }
-    }
-
-    function tick(dt) {
-      const add = calcAutoRate() * dt;
-      if (add > 0) {
-        const before = state.totalLife;
-        state.life += add;
-        state.totalLife += add;
-        checkMilestones();
-        const unlockedByAuto = upgrades.some(
-          (up) => up.unlockAt > before && up.unlockAt <= state.totalLife
-        );
-        if (unlockedByAuto) renderUpgrades();
-      }
-    }
-
-    function save() {
-      const payload = {
-        ...state,
-        savedAt: Date.now()
+    function newState() {
+      return {
+        life: 0, runTotal: 0, allTime: 0,
+        levels: {}, projects: {},
+        history: 0, runs: 1, ended: false,
+        lastClickAt: 0, combo: 0, comboAt: 0,
+        buffs: {}, nextEventAt: 0, clicks: 0, eventsCaught: 0,
+        stopsSeen: 0, savedAt: 0,
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-      state.lastSaveAt = Date.now();
-      log("已保存当前进度。");
     }
 
-    function load() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      try {
-        const data = JSON.parse(raw);
-        if (!data || typeof data !== "object") return;
+    const lv = (s, id) => s.levels[id] || 0;
+    const has = (s, id) => !!s.projects[id];
+    const buffOn = (s, id, t) => (s.buffs[id] || 0) > t;
 
-        state.life = Number(data.life || 0);
-        state.totalLife = Number(data.totalLife || 0);
-        state.clickBase = Number(data.clickBase || 1);
-        state.clickBonusAdd = Number(data.clickBonusAdd || 0);
-        state.clickBonusMul = Number(data.clickBonusMul || 1);
-        state.autoBase = Number(data.autoBase || 0);
-        state.globalMul = Number(data.globalMul || 1);
-        state.levels = { ...state.levels, ...(data.levels || {}) };
-        state.milestonesSeen = data.milestonesSeen || {};
+    function doublingMul(level) {
+      let m = 1;
+      for (const d of DOUBLINGS) if (level >= d) m *= 2;
+      return m;
+    }
+    function nextDoubling(level) { return DOUBLINGS.find((d) => d > level); }
 
-        if (data.savedAt) {
-          const offlineSec = Math.max(0, (Date.now() - Number(data.savedAt)) / 1000);
-          if (offlineSec > 1 && calcAutoRate() > 0) {
-            const bonus = calcAutoRate() * Math.min(offlineSec, 8 * 60 * 60);
-            state.life += bonus;
-            state.totalLife += bonus;
-            log(`离线续命 +${fmt(bonus)} 秒。`);
-          }
+    function historyMul(s) { return 1 + 0.15 * s.history; }
+    function globalMul(s) {
+      return Math.pow(1.1, lv(s, "hawaii_guitar")) * Math.pow(1.5, lv(s, "basic_law")) *
+        (has(s, "every_country") ? 2 : 1) * historyMul(s);
+    }
+    function genRate(s, g, level = lv(s, g.id)) {
+      return g.rate * level * doublingMul(level) * (has(s, "three_reps") ? 2 : 1);
+    }
+    function isSilent(s, t) { return has(s, "mensheng") && t - s.lastClickAt >= 30; }
+    function autoRate(s, t) {
+      let base = 0;
+      for (const g of GENS) base += genRate(s, g);
+      let m = globalMul(s);
+      if (buffOn(s, "excited", t)) m *= has(s, "excited_forever") ? 15 : 7;
+      if (buffOn(s, "silent", t)) m *= 5;
+      if (isSilent(s, t)) m *= 2;
+      return base * m;
+    }
+    function comboMul(s) { return 1 + Math.min(s.combo, 50) * 0.02; }
+    function clickBase(s, t) {
+      let p = (1 + lv(s, "red_boy")) * Math.pow(1.5, lv(s, "duck_pen")) * globalMul(s);
+      if (has(s, "gouli")) p += 0.03 * autoRate(s, t);
+      if (buffOn(s, "angry", t)) p *= 15;
+      return p;
+    }
+    function clickPower(s, t) { return clickBase(s, t) * comboMul(s); }
+    function autoClicksPerSec(s) { return has(s, "speed_pen") ? 10 : has(s, "glasses") ? 1 : 0; }
+
+    function priceMul(s, t) { return buffOn(s, "naive", t) ? 0.5 : 1; }
+    function itemDef(id) { return GENS.find((g) => g.id === id) || BOOSTS.find((b) => b.id === id); }
+    function growthOf(def) { return def.growth || 1.15; }
+    function costN(s, def, n, t) {
+      const g = growthOf(def), l = lv(s, def.id);
+      return def.cost * Math.pow(g, l) * (Math.pow(g, n) - 1) / (g - 1) * priceMul(s, t);
+    }
+    function maxAffordable(s, def, t) {
+      const g = growthOf(def), l = lv(s, def.id);
+      const first = def.cost * Math.pow(g, l) * priceMul(s, t);
+      if (s.life < first) return 0;
+      return Math.max(1, Math.floor(Math.log(s.life * (g - 1) / first + 1) / Math.log(g)));
+    }
+    function buyItem(s, id, n, t) {
+      const def = itemDef(id);
+      if (!def) return 0;
+      if (n === "max") n = maxAffordable(s, def, t);
+      if (n < 1) return 0;
+      const cost = costN(s, def, n, t);
+      if (s.life < cost) return 0;
+      s.life -= cost;
+      s.levels[id] = lv(s, id) + n;
+      return n;
+    }
+    function buyProject(s, id) {
+      const p = PROJECTS.find((x) => x.id === id);
+      if (!p || has(s, id) || !p.when(s) || s.life < p.cost) return false;
+      s.life -= p.cost;
+      s.projects[id] = true;
+      if (id === "interview" && !s.nextEventAt) s.nextEventAt = 0; // 交给 UI 排期
+      return true;
+    }
+
+    function gain(s, amount) {
+      s.life += amount; s.runTotal += amount; s.allTime += amount;
+    }
+    function manualClick(s, t) {
+      if (t - s.comboAt < 0.6) s.combo = Math.min(s.combo + 1, 50); else s.combo = 0;
+      s.comboAt = t;
+      if (buffOn(s, "silent", t)) s.buffs.silent = 0; // 一说话就破功
+      s.lastClickAt = t;
+      s.clicks += 1;
+      const amt = clickPower(s, t);
+      gain(s, amt);
+      return amt;
+    }
+    function tick(s, t, dt) {
+      if (t - s.comboAt > 1.2) s.combo = 0;
+      const amt = (autoRate(s, t) + autoClicksPerSec(s) * clickBase(s, t)) * dt;
+      if (amt > 0) gain(s, amt);
+      return amt;
+    }
+
+    function prestigeTotal(allTime) { return Math.floor(Math.cbrt(allTime / 3e8)); }
+    function prestigeGain(s) { return Math.max(0, prestigeTotal(s.allTime) - s.history); }
+    function doPrestige(s) {
+      const g = prestigeGain(s);
+      if (!has(s, "fate") || g < 1) return 0;
+      const kept = {};
+      for (const p of PROJECTS) if (p.keep && s.projects[p.id]) kept[p.id] = true;
+      s.history += g;
+      s.runs += 1;
+      s.life = 0; s.runTotal = 0; s.levels = {}; s.projects = kept; s.buffs = {}; s.combo = 0;
+      return g;
+    }
+
+    function eventEffect(s, type, t) {
+      const dur = has(s, "tanxiao") ? 2 : 1;
+      if (type === "excited") s.buffs.excited = t + 30 * dur;
+      if (type === "angry") s.buffs.angry = t + 15 * dur;
+      if (type === "naive") s.buffs.naive = t + 20 * dur;
+      if (type === "silent") { s.buffs.silent = t + 40 * dur; }
+      if (type === "toosimple") {
+        const amt = Math.min(s.life * 0.15, autoRate(s, t) * 900) + clickBase(s, t) * 30 + 13;
+        gain(s, amt);
+        return amt;
+      }
+      s.eventsCaught += 1;
+      return 0;
+    }
+    function pickEvent(s, rnd) {
+      const pool = EVENT_TYPES.filter((e) => !e.need || has(s, e.need));
+      let total = pool.reduce((a, e) => a + e.weight, 0);
+      let r = rnd * total;
+      for (const e of pool) { if ((r -= e.weight) <= 0) return e; }
+      return pool[0];
+    }
+    function eventInterval(s, rnd) {
+      return (50 + rnd * 70) / (has(s, "faster_reporters") ? 2 : 1);
+    }
+  </script>
+
+  <!-- ================= 界面 ================= -->
+  <script>
+    let S = newState();
+    const now = () => Date.now() / 1000;
+    const $ = (id) => document.getElementById(id);
+    let buyAmount = 1;
+
+    const UNITS = [[1e20, "垓"], [1e16, "京"], [1e12, "兆"], [1e8, "亿"], [1e4, "万"]];
+    function fmt(n) {
+      if (!isFinite(n)) return "∞";
+      if (n >= 1e24) return n.toExponential(2);
+      for (const [v, u] of UNITS) if (n >= v) return (n / v).toFixed(n / v >= 100 ? 1 : 2).replace(/\.0+$/, "") + u;
+      if (n >= 100) return Math.floor(n).toString();
+      return n.toFixed(n >= 10 ? 1 : 2).replace(/\.?0+$/, "") || "0";
+    }
+    function human(sec) {
+      const Y = 31557600;
+      if (sec >= Y * 1e4) return `≈ ${fmt(sec / Y)} 年`;
+      if (sec >= Y) return `≈ ${(sec / Y).toFixed(1)} 年`;
+      if (sec >= 86400) return `≈ ${(sec / 86400).toFixed(1)} 天`;
+      if (sec >= 3600) return `≈ ${(sec / 3600).toFixed(1)} 小时`;
+      if (sec >= 60) return `≈ ${(sec / 60).toFixed(1)} 分钟`;
+      return "";
+    }
+
+    function log(text, cls) {
+      const row = document.createElement("div");
+      const t = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      row.innerHTML = `<span style="opacity:.55">${t}</span> `;
+      const span = document.createElement("span");
+      span.textContent = text;
+      if (cls) span.className = cls;
+      row.appendChild(span);
+      $("logBox").prepend(row);
+      while ($("logBox").children.length > 60) $("logBox").lastChild.remove();
+    }
+
+    function floatText(x, y, text, crit) {
+      if (document.querySelectorAll(".float").length > 30) return;
+      const f = document.createElement("div");
+      f.className = "float" + (crit ? " crit" : "");
+      f.textContent = text;
+      f.style.left = x + (Math.random() * 40 - 20) + "px";
+      f.style.top = y - 10 + "px";
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 900);
+    }
+    const toastQueue = [];
+    let toastBusy = false;
+    function toast(title, sub) {
+      toastQueue.push([title, sub]);
+      if (toastQueue.length > 3) toastQueue.splice(0, toastQueue.length - 3); // 积压时只留最新的
+      if (!toastBusy) nextToast();
+    }
+    function nextToast() {
+      const item = toastQueue.shift();
+      if (!item) { toastBusy = false; return; }
+      toastBusy = true;
+      showToast(item[0], item[1]);
+      setTimeout(nextToast, 1500);
+    }
+    function showToast(title, sub) {
+      const d = document.createElement("div");
+      d.className = "toast";
+      d.innerHTML = `${title}<small></small>`;
+      d.querySelector("small").textContent = sub || "";
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 2200);
+    }
+    function modal(html, buttons) {
+      $("modal").innerHTML = html + `<div class="actions"></div>`;
+      const act = $("modal").querySelector(".actions");
+      for (const b of buttons) {
+        const btn = document.createElement("button");
+        btn.textContent = b.label;
+        if (b.primary) btn.className = "primary";
+        btn.onclick = () => { $("modalBg").classList.remove("show"); b.onClick && b.onClick(); };
+        act.appendChild(btn);
+      }
+      $("modalBg").classList.add("show");
+    }
+
+    // ---------- 商店：按「结构签名」重建，平时只更新文字 ----------
+    let shopSig = "";
+    function visibleGens() {
+      const out = [];
+      for (let i = 0; i < GENS.length; i++) {
+        const g = GENS[i];
+        const prevOwned = i === 0 || lv(S, GENS[i - 1].id) > 0;
+        if (lv(S, g.id) > 0 || (prevOwned && S.runTotal >= g.cost * 0.4)) out.push({ g, locked: false });
+        else { out.push({ g, locked: true }); break; } // 只露出下一个谜之产线
+      }
+      return out;
+    }
+    function visibleBoosts() { return BOOSTS.filter((b) => lv(S, b.id) > 0 || S.runTotal >= (b.unlockAt || 0)); }
+    function visibleProjects() { return PROJECTS.filter((p) => !has(S, p.id) && p.when(S)); }
+
+    function cardHTML(id, kind) {
+      return `<div class="card ${kind}" data-card="${id}">
+        <div class="name"></div><button data-kind="${kind}" data-id="${id}"></button>
+        <div class="desc"></div><div class="sub"></div></div>`;
+    }
+    function rebuildShop() {
+      const projects = visibleProjects(), boosts = visibleBoosts(), gens = visibleGens();
+      const sig = projects.map((p) => p.id).join() + "|" + boosts.map((b) => b.id).join() + "|" +
+        gens.map((x) => x.g.id + (x.locked ? "?" : "")).join();
+      if (sig === shopSig) return;
+      shopSig = sig;
+      $("projectWrap").style.display = projects.length ? "" : "none";
+      $("projectList").innerHTML = projects.map((p) => cardHTML(p.id, "project")).join("");
+      $("boostList").innerHTML = boosts.map((b) => cardHTML(b.id, "boost")).join("");
+      $("genList").innerHTML = gens.map((x) => cardHTML(x.g.id, x.locked ? "gen locked" : "gen")).join("");
+      updateShop();
+    }
+    function buyLabel(def, t) {
+      let n = buyAmount === "max" ? Math.max(1, maxAffordable(S, def, t)) : buyAmount;
+      const cost = costN(S, def, n, t);
+      return { n, cost, can: S.life >= cost };
+    }
+    function updateShop() {
+      const t = now();
+      const sale = priceMul(S, t) < 1 ? " 🔥半价" : "";
+      for (const card of document.querySelectorAll("[data-card]")) {
+        const id = card.dataset.card;
+        const btn = card.querySelector("button");
+        const set = (sel, txt) => { const e = card.querySelector(sel); if (e.textContent !== txt) e.textContent = txt; };
+        if (card.classList.contains("project")) {
+          const p = PROJECTS.find((x) => x.id === id);
+          set(".name", p.name); set(".desc", p.desc); set(".sub", "");
+          btn.innerHTML = `研究<br>${fmt(p.cost)} 秒`;
+          btn.disabled = S.life < p.cost;
+        } else if (card.classList.contains("locked")) {
+          const g = GENS.find((x) => x.id === id);
+          set(".name", "？？？"); set(".desc", `累计续命到 ${fmt(g.cost * 0.4)} 秒后揭晓`); set(".sub", "");
+          btn.textContent = "未解锁"; btn.disabled = true;
+        } else if (card.classList.contains("gen")) {
+          const g = GENS.find((x) => x.id === id);
+          const l = lv(S, id), b = buyLabel(g, t);
+          card.querySelector(".name").innerHTML = `${g.name}<span class="lv">×${l}</span>`;
+          set(".desc", g.desc);
+          const nd = nextDoubling(l);
+          const each = genRate(S, g, Math.max(l, 1)) / Math.max(l, 1) * globalMul(S);
+          set(".sub", `每台 ${fmt(each)}/秒 · 共 ${fmt(genRate(S, g) * globalMul(S))}/秒` + (nd ? ` · 到 ${nd} 台产能翻倍` : ""));
+          btn.innerHTML = `买 ${b.n}${sale}<br>${fmt(b.cost)} 秒`;
+          btn.disabled = !b.can;
+        } else {
+          const def = BOOSTS.find((x) => x.id === id);
+          const l = lv(S, id), b = buyLabel(def, t);
+          card.querySelector(".name").innerHTML = `${def.name}<span class="lv">Lv.${l}</span>`;
+          set(".desc", def.desc); set(".sub", "");
+          btn.innerHTML = `升 ${b.n}${sale}<br>${fmt(b.cost)} 秒`;
+          btn.disabled = !b.can;
         }
-      } catch (_) {
-        localStorage.removeItem(STORAGE_KEY);
       }
     }
 
-    el.clickBtn.addEventListener("click", manualClick);
-    el.upgradeList.addEventListener("click", (ev) => {
-      const btn = ev.target.closest("button[data-up]");
-      if (!btn) return;
-      buyUpgrade(btn.dataset.up);
-    });
+    // ---------- 统计与进度 ----------
+    let lastLifeShown = 0;
+    function renderStats() {
+      const t = now();
+      const lifeTxt = `${fmt(S.life)} 秒`;
+      if ($("lifeAmount").textContent !== lifeTxt) $("lifeAmount").textContent = lifeTxt;
+      const h = human(S.life);
+      $("lifeHuman").innerHTML = h ? `可支配续命 · <b>${h}</b>` : "当前可支配续命秒数";
+      const cp = clickPower(S, t);
+      $("clickPower").textContent = `${fmt(cp)} 秒`;
+      $("clickLabel").textContent = `+${fmt(cp)} 秒 · 立即续命`;
+      const ar = autoRate(S, t) + autoClicksPerSec(S) * clickBase(S, t);
+      $("autoRate").textContent = `${fmt(ar)} 秒`;
+      $("globalMultiplier").textContent = `x${fmt(globalMul(S))}`;
+      $("historyStat").textContent = S.history ? `${S.history} 点 · 第 ${S.runs} 轮` : (has(S, "fate") ? "已开启" : "尚未开启");
+      $("allTime").textContent = `${fmt(S.allTime)} 秒`;
 
-    el.saveBtn.addEventListener("click", save);
-    el.resetBtn.addEventListener("click", () => {
-      const yes = window.confirm("确认重开轮回？这会清空本地存档。");
-      if (!yes) return;
-      localStorage.removeItem(STORAGE_KEY);
-      location.reload();
-    });
+      const next = STOPS.find((x) => S.allTime < x.at);
+      const prevAt = STOPS.filter((x) => S.allTime >= x.at).pop()?.at || 0;
+      if (next) {
+        $("nextStop").textContent = next.name;
+        const p = (Math.log10(S.allTime + 1) - Math.log10(prevAt + 1)) / (Math.log10(next.at) - Math.log10(prevAt + 1));
+        $("journeyBar").style.width = Math.max(0, Math.min(100, p * 100)) + "%";
+      } else {
+        $("nextStop").textContent = "已抵达宇宙尽头";
+        $("journeyBar").style.width = "100%";
+      }
 
-    let lastUpdateMs = Date.now();
-    function stepGame() {
-      const nowMs = Date.now();
-      const elapsedSec = Math.max(0, (nowMs - lastUpdateMs) / 1000);
-      lastUpdateMs = nowMs;
-      tick(elapsedSec);
+      // 连击
+      const combo = S.combo;
+      $("comboBar").style.width = (Math.min(combo, 50) / 50 * 100) + "%";
+      $("clickBtn").classList.toggle("hot", combo >= 25);
+      const silent = isSilent(S, t) || buffOn(S, "silent", t);
+      $("clickBtn").classList.toggle("silent", silent);
+      $("comboLabel").textContent = silent ? "闷声中……现在点击会破功"
+        : combo >= 50 ? `连击 ${combo} · EXCITED! ×${comboMul(S).toFixed(2)}`
+        : combo >= 3 ? `连击 ${combo} · ×${comboMul(S).toFixed(2)}` : "连点可以叠连击";
+
+      // buffs
+      const tags = [];
+      const left = (id) => Math.ceil(S.buffs[id] - t);
+      if (buffOn(S, "excited", t)) tags.push([`Excited! 自动 ×${has(S, "excited_forever") ? 15 : 7} · ${left("excited")}s`, "gold"]);
+      if (buffOn(S, "angry", t)) tags.push([`I'm angry! 点击 ×15 · ${left("angry")}s`, "gold"]);
+      if (buffOn(S, "naive", t)) tags.push([`Naive 半价 · ${left("naive")}s`, "gold"]);
+      if (buffOn(S, "silent", t)) tags.push([`闷声发大财 ×5 · ${left("silent")}s`, "gold"]);
+      if (isSilent(S, t)) tags.push(["闷声状态 自动 ×2", ""]);
+      if (autoClicksPerSec(S)) tags.push([`自动点击 ${autoClicksPerSec(S)}/秒`, ""]);
+      const html = tags.map(([txt, c]) => `<span class="buff ${c}">${txt}</span>`).join("");
+      if ($("buffs").innerHTML !== html) $("buffs").innerHTML = html;
+      document.body.classList.toggle("frenzy", buffOn(S, "excited", t) || buffOn(S, "angry", t));
+
+      const pb = $("prestigeBtn");
+      if (has(S, "fate")) {
+        pb.style.display = "inline-block";
+        const g = prestigeGain(S);
+        pb.textContent = `推进历史的行程 (+${g} 点)`;
+        pb.disabled = g < 1;
+      } else pb.style.display = "none";
+
+      if (S.life > lastLifeShown * 1.5 && S.life > 100) {
+        $("lifeAmount").classList.add("pop");
+        setTimeout(() => $("lifeAmount").classList.remove("pop"), 90);
+      }
+      lastLifeShown = S.life;
+    }
+
+    function checkStops() {
+      while (S.stopsSeen < STOPS.length && S.allTime >= STOPS[S.stopsSeen].at) {
+        const st = STOPS[S.stopsSeen];
+        S.stopsSeen += 1;
+        log(`【抵达：${st.name}】${st.text}`, "story");
+        if (st.at >= 31557600) toast(`续满${st.name}`, st.text);
+        if (st.at === UNIVERSE && !S.ended) {
+          S.ended = true;
+          showEnding();
+        }
+      }
+    }
+    function showEnding() {
+      modal(`<h3>+1s</h3>
+        <p>你从按下第一个按钮开始，续满了一分钟、一年、一个人的一生、中华五千年、人类历史、地球的年龄……</p>
+        <p>现在，你给整个宇宙续上了一秒。</p>
+        <p>共点击 ${S.clicks.toLocaleString()} 次，接住了 ${S.eventsCaught} 次记者提问，推进了 ${S.runs - 1} 次历史的行程。</p>
+        <p style="color:#a50f15;font-weight:700">谢谢你。</p>`,
+        [{ label: "继续续命（无尽模式）", primary: true }]);
+    }
+
+    // ---------- 交互 ----------
+    $("clickBtn").addEventListener("click", (ev) => {
+      const t = now();
+      const wasSilent = isSilent(S, t) || buffOn(S, "silent", t);
+      const amt = manualClick(S, t);
+      if (wasSilent) log("你一开口，闷声状态就破了。", "hl");
+      const r = ev.currentTarget.getBoundingClientRect();
+      const x = ev.clientX || r.left + r.width / 2, y = ev.clientY || r.top + r.height / 2;
+      floatText(x, y, `+${fmt(amt)}`, S.combo >= 50 || buffOn(S, "angry", t));
+      checkStops();
       renderStats();
-      refreshUpgradeButtons();
-      if (Date.now() - state.lastSaveAt > 8000) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
-        state.lastSaveAt = Date.now();
+    });
+
+    $("buyAmt").addEventListener("click", (ev) => {
+      const b = ev.target.closest("button[data-n]");
+      if (!b) return;
+      buyAmount = b.dataset.n === "max" ? "max" : Number(b.dataset.n);
+      for (const x of $("buyAmt").children) x.classList.toggle("on", x === b);
+      updateShop();
+    });
+
+    document.querySelector(".scroll").addEventListener("click", (ev) => {
+      const btn = ev.target.closest("button[data-id]");
+      if (!btn || btn.disabled) return;
+      const id = btn.dataset.id, t = now();
+      if (btn.dataset.kind === "project") {
+        const p = PROJECTS.find((x) => x.id === id);
+        if (buyProject(S, id)) {
+          log(`【课题完成：${p.name}】${p.story}`, "story");
+          if (id === "interview") scheduleEvent();
+          if (id === "fate") toast("历史的行程", "现在可以重开轮回，换取永久倍率");
+        }
+      } else {
+        const before = lv(S, id);
+        const n = buyItem(S, id, buyAmount, t);
+        if (n) {
+          const def = itemDef(id);
+          if (before === 0 && def.flavor) log(def.flavor, "story");
+          const after = lv(S, id);
+          const crossed = DOUBLINGS.filter((d) => d > before && d <= after);
+          if (GENS.includes(def) && crossed.length) {
+            log(`${def.name} 达到 ${crossed[crossed.length - 1]} 台：产能翻倍！`, "hl");
+            floatText(ev.clientX, ev.clientY, "产能翻倍！", true);
+          }
+          const card = btn.closest(".card");
+          card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+        }
       }
+      rebuildShop(); updateShop(); renderStats();
+    });
+
+    // ---------- 记者举手事件 ----------
+    let reporterEl = null;
+    function scheduleEvent() {
+      S.nextEventAt = now() + eventInterval(S, Math.random());
+    }
+    function spawnReporter() {
+      if (reporterEl) return;
+      const d = document.createElement("div");
+      d.className = "reporter";
+      d.innerHTML = `🙋 记者举手了！<small>快点我，晚了就跑了</small>`;
+      d.style.left = 20 + Math.random() * (window.innerWidth - 240) + "px";
+      d.style.top = 80 + Math.random() * (window.innerHeight - 200) + "px";
+      d.onclick = (ev) => {
+        ev.stopPropagation();
+        const t = now();
+        const e = pickEvent(S, Math.random());
+        const amt = eventEffect(S, e.id, t);
+        if (e.id === "toosimple") S.eventsCaught += 1;
+        toast(e.title, amt ? `+${fmt(amt)} 秒` : e.sub);
+        log(`记者提问：「${e.title}」 —— ${amt ? `续命 +${fmt(amt)} 秒` : e.sub}`, "hl");
+        d.remove(); reporterEl = null;
+        checkStops(); renderStats(); updateShop();
+      };
+      document.body.appendChild(d);
+      reporterEl = d;
+      setTimeout(() => { if (reporterEl === d) { d.remove(); reporterEl = null; } }, 13000);
     }
 
-    load();
-    if (!Object.keys(state.milestonesSeen).length) {
-      log("欢迎来到续命工坊。先点一下，先续一秒。");
+    // ---------- 存档 ----------
+    function serialize() { return JSON.stringify({ ...S, savedAt: Date.now() }); }
+    function save(manual) {
+      try { localStorage.setItem(SAVE_KEY, serialize()); } catch (_) {}
+      if (manual) log("已保存当前进度。");
     }
-    checkMilestones();
+    function load() {
+      let raw = null;
+      try { raw = localStorage.getItem(SAVE_KEY); } catch (_) {}
+      if (raw) {
+        try {
+          const d = JSON.parse(raw);
+          S = Object.assign(newState(), d);
+          S.buffs = {}; S.combo = 0; S.lastClickAt = now();
+          const offline = Math.max(0, (Date.now() - Number(d.savedAt || Date.now())) / 1000);
+          const cap = (has(S, "life_exp") ? 24 : 8) * 3600;
+          const t = now() - 1e6; // 离线不算闷声/事件
+          const rate = (autoRate(S, t) + autoClicksPerSec(S) * clickBase(S, t));
+          if (offline > 5 && rate > 0) {
+            const bonus = rate * Math.min(offline, cap);
+            gain(S, bonus);
+            log(`你不在的时候，产线续了 ${fmt(bonus)} 秒（${human(bonus) || "一点点"}）。`, "hl");
+          }
+          return true;
+        } catch (e) {
+          console.error(e);
+          try { localStorage.setItem(SAVE_KEY + "-broken", raw); } catch (_) {}
+          return false;
+        }
+      }
+      // 从 v1 存档迁移：保留等级，按新规则重算
+      try {
+        const old = JSON.parse(localStorage.getItem(OLD_SAVE_KEY) || "null");
+        if (old && old.levels) {
+          S = newState();
+          S.levels = { ...old.levels };
+          S.life = Number(old.life || 0);
+          S.runTotal = S.allTime = Number(old.totalLife || 0);
+          log("检测到旧版存档，已迁移到新版续命系统。", "story");
+          return true;
+        }
+      } catch (_) {}
+      return false;
+    }
+
+    $("saveBtn").addEventListener("click", () => save(true));
+    $("resetBtn").addEventListener("click", () => {
+      modal(`<h3>删档重来？</h3><p>所有进度（包括历史的行程）都会清空。</p>`, [
+        { label: "算了" },
+        { label: "删档", primary: true, onClick: () => {
+          localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY);
+          window.onbeforeunload = null; skipSave = true; location.reload();
+        } },
+      ]);
+    });
+    $("prestigeBtn").addEventListener("click", () => {
+      const g = prestigeGain(S);
+      if (g < 1) return;
+      modal(`<h3>推进历史的行程</h3>
+        <p>本轮的秒数、产线、增幅和大部分课题都会清零。</p>
+        <p>你将获得 <b>${g}</b> 点历史进程（共 ${S.history + g} 点），全局倍率永久 ×${(1 + 0.15 * (S.history + g)).toFixed(2)}。</p>
+        <p style="color:#5c5548">一个人的命运，当然要靠自我奋斗，但是也要考虑到历史的行程。</p>`, [
+        { label: "再续一会" },
+        { label: "推进！", primary: true, onClick: () => {
+          doPrestige(S);
+          shopSig = "";
+          log(`【第 ${S.runs} 轮】历史的行程向前推进了。现在一切从头，但你已经不一样了。`, "story");
+          toast(`第 ${S.runs} 轮`, `全局倍率 ×${historyMul(S).toFixed(1)}`);
+          rebuildShop(); renderStats(); save();
+        } },
+      ]);
+    });
+
+    // ---------- 主循环 ----------
+    let lastT = now(), skipSave = false, lastSave = 0;
+    function step() {
+      const t = now();
+      const dt = Math.max(0, Math.min(t - lastT, 3600 * 24));
+      lastT = t;
+      tick(S, t, dt);
+      if (has(S, "interview")) {
+        if (!S.nextEventAt || S.nextEventAt > t + 1000) scheduleEvent();
+        if (t >= S.nextEventAt && document.visibilityState === "visible") { spawnReporter(); scheduleEvent(); }
+      }
+      checkStops();
+      rebuildShop();
+      updateShop();
+      renderStats();
+      if (Date.now() - lastSave > 8000) { save(); lastSave = Date.now(); }
+    }
+
+    const loaded = load();
+    if (!loaded) {
+      log("欢迎来到续命工坊。先点一下，先续一秒。", "story");
+      log("提示：快速连点能叠连击；右边的课题会随进度出现。");
+    }
+    S.stopsSeen = Math.min(S.stopsSeen, STOPS.length);
+    rebuildShop();
     renderStats();
-    renderUpgrades();
-    setInterval(stepGame, 250);
-
-    // Immediate catch-up when tab becomes visible again.
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        stepGame();
-      }
-    });
-
-    window.addEventListener("beforeunload", () => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
-    });
+    setInterval(step, 200);
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") step(); });
+    window.addEventListener("beforeunload", () => { if (!skipSave) save(); });
   </script>
 </body>
 </html>
