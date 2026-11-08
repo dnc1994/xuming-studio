@@ -144,16 +144,87 @@
       .wrap { grid-template-columns: 1fr; }
       .scroll { max-height: none; }
     }
+
+    /* ---------- 美术 ---------- */
+    h1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .watches { display: inline-flex; gap: 2px; }
+    .watch { width: 30px; height: 30px; }
+    .watch .sec { transform-origin: 20px 20px; animation: secTick 60s steps(60) infinite; }
+    .watch.w2 .sec { animation-delay: -17s; }
+    .watch.w3 .sec { animation-duration: 20s; animation-delay: -5s; } /* 走得快的那个 */
+    @keyframes secTick { to { transform: rotate(360deg); } }
+
+    .hero { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .hero-num { flex: 1; min-width: 0; }
+    .frog-wrap { position: relative; width: 120px; flex: none; cursor: pointer; }
+    .frog-svg { width: 120px; display: block; overflow: visible; }
+    .frog-body { transform-origin: 100px 170px; transform-box: view-box; }
+    .frog-wrap.bounce .frog-body { animation: frogBounce 220ms ease-out; }
+    @keyframes frogBounce { 0% { transform: scale(1, 1); } 40% { transform: scale(1.08, 0.9); } 100% { transform: scale(1, 1); } }
+    .frog-wrap.excited .frog-body { animation: frogHop 0.45s ease-in-out infinite alternate; }
+    @keyframes frogHop { from { transform: translateY(0); } to { transform: translateY(-10px) rotate(2deg); } }
+    .pupils { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+    @keyframes blink { 0%, 95%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
+    .frog-svg .stars, .frog-svg .brows, .frog-svg .m-open, .frog-svg .m-zip { display: none; }
+    .frog-wrap.talk .m-open { display: inline; } .frog-wrap.talk .m-smile { display: none; }
+    .frog-wrap.excited .stars { display: inline; } .frog-wrap.excited .pupils { display: none; }
+    .frog-wrap.angry .brows { display: inline; }
+    .frog-wrap.angry .frog-body { filter: hue-rotate(-100deg) saturate(1.5); animation: shake 0.12s linear infinite; }
+    @keyframes shake { 0% { transform: translateX(-2px); } 50% { transform: translateX(2px); } 100% { transform: translateX(-2px); } }
+    .frog-wrap.silent .m-zip { display: inline; } .frog-wrap.silent .m-smile, .frog-wrap.silent .m-open { display: none; }
+    .frog-wrap.silent .frog-body { opacity: 0.85; }
+    .say {
+      position: absolute; left: 70%; top: -14px; background: #fff; border: 2px solid var(--ink); border-radius: 12px;
+      padding: 3px 9px; font-weight: 800; font-size: 14px; white-space: nowrap; opacity: 0; transform: scale(0.6);
+      transition: opacity 150ms, transform 150ms; pointer-events: none; z-index: 5;
+    }
+    .say.show { opacity: 1; transform: scale(1); }
+    .say::after { content: ""; position: absolute; left: 10px; bottom: -8px; border: 7px solid transparent; border-top-color: var(--ink); border-bottom: 0; }
+
+    .card { grid-template-columns: 42px 1fr auto; gap: 10px; }
+    .card .ic { width: 42px; height: 42px; }
+    .card .ic svg { width: 100%; height: 100%; }
+    .card .body { min-width: 0; }
+    .card button { grid-row: auto; grid-column: 3; }
+    .card.locked .ic { filter: grayscale(1); }
+
+    .reporter {
+      position: fixed; z-index: 40; cursor: pointer; left: 0; width: 110px; padding: 0; border: none; background: none; box-shadow: none;
+      animation: runAcross 10s linear forwards; user-select: none;
+    }
+    .reporter.rtl { animation-name: runBack; }
+    .reporter.rtl .reporter-svg { transform: scaleX(-1); }
+    .reporter-svg { width: 110px; display: block; overflow: visible; animation: runBob 0.28s ease-in-out infinite alternate; }
+    .reporter .leg-a { transform-origin: 52px 104px; transform-box: view-box; animation: legA 0.28s ease-in-out infinite alternate; }
+    .reporter .leg-b { transform-origin: 68px 104px; transform-box: view-box; animation: legA 0.28s ease-in-out infinite alternate-reverse; }
+    @keyframes legA { from { transform: rotate(-24deg); } to { transform: rotate(24deg); } }
+    @keyframes runBob { from { translate: 0 0; } to { translate: 0 -6px; } }
+    @keyframes runAcross { from { transform: translateX(-140px); } to { transform: translateX(calc(100vw + 20px)); } }
+    @keyframes runBack { from { transform: translateX(calc(100vw + 20px)); } to { transform: translateX(-140px); } }
+    .reporter .bubble {
+      position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: #fff; border: 2px solid var(--ink);
+      border-radius: 10px; padding: 3px 8px; font-weight: 800; font-size: 13px; white-space: nowrap;
+    }
+    .reporter:hover .reporter-svg { filter: drop-shadow(0 0 6px #ffd34d); }
+
+    .rain { position: fixed; top: -60px; z-index: 55; pointer-events: none; width: 44px; animation: fall linear forwards; }
+    .rain svg { width: 100%; }
+    @keyframes fall { to { transform: translateY(calc(100vh + 120px)) rotate(var(--rot)); } }
   </style>
 </head>
 <body>
   <div class="wrap">
     <section class="panel">
-      <h1>续命工坊：膜蛤版</h1>
+      <h1>续命工坊：膜蛤版 <span class="watches" id="watches" title="三个表"></span></h1>
       <p class="subtitle">点击续一秒，靠梗文化升级。终极目标：给整个宇宙续上一秒。</p>
 
-      <div id="lifeAmount" class="big-number">0 秒</div>
-      <div class="resource-label" id="lifeHuman">当前可支配续命秒数</div>
+      <div class="hero">
+        <div class="frog-wrap" id="frog" title="蛤"><div class="say" id="say"></div></div>
+        <div class="hero-num">
+          <div id="lifeAmount" class="big-number">0 秒</div>
+          <div class="resource-label" id="lifeHuman">当前可支配续命秒数</div>
+        </div>
+      </div>
 
       <div class="click-wrap">
         <button id="clickBtn" class="click-btn">
@@ -180,6 +251,7 @@
       <div class="toolbar">
         <button id="saveBtn">立刻保存</button>
         <button id="prestigeBtn" class="prestige">推进历史的行程</button>
+        <button id="soundBtn">🔊 音效</button>
         <button id="resetBtn">删档重来</button>
       </div>
     </section>
@@ -432,6 +504,182 @@
     }
   </script>
 
+  <!-- ================= 美术与音效（全部原创 SVG + WebAudio 合成） ================= -->
+  <script id="art">
+    const ART = {};
+
+    // 吉祥物：戴黑框眼镜的蛤
+    ART.frog = `<svg viewBox="0 0 200 180" class="frog-svg" aria-label="蛤">
+      <ellipse cx="100" cy="172" rx="66" ry="7" fill="rgba(0,0,0,.14)"/>
+      <g class="frog-body">
+        <ellipse cx="52" cy="164" rx="24" ry="9" fill="#4c9a3d"/>
+        <ellipse cx="148" cy="164" rx="24" ry="9" fill="#4c9a3d"/>
+        <ellipse cx="100" cy="128" rx="64" ry="42" fill="#5fae4e"/>
+        <ellipse cx="100" cy="140" rx="42" ry="26" fill="#d6ecb0"/>
+        <ellipse cx="100" cy="88" rx="80" ry="50" fill="#6cc05a"/>
+        <circle cx="62" cy="52" r="29" fill="#6cc05a"/>
+        <circle cx="138" cy="52" r="29" fill="#6cc05a"/>
+        <circle cx="62" cy="54" r="19" fill="#fff"/>
+        <circle cx="138" cy="54" r="19" fill="#fff"/>
+        <g class="pupils">
+          <circle cx="65" cy="57" r="8.5" fill="#1d1a15"/><circle cx="141" cy="57" r="8.5" fill="#1d1a15"/>
+          <circle cx="68" cy="54" r="2.6" fill="#fff"/><circle cx="144" cy="54" r="2.6" fill="#fff"/>
+        </g>
+        <g class="stars" fill="#e8a800">
+          <path d="M62 41l4 9 10 1-7.5 6.5 2.5 9.5-9-5.2-9 5.2 2.5-9.5-7.5-6.5 10-1z"/>
+          <path d="M138 41l4 9 10 1-7.5 6.5 2.5 9.5-9-5.2-9 5.2 2.5-9.5-7.5-6.5 10-1z"/>
+        </g>
+        <g class="brows" stroke="#1d1a15" stroke-width="6" stroke-linecap="round">
+          <path d="M38 24 L80 36"/><path d="M162 24 L120 36"/>
+        </g>
+        <g fill="none" stroke="#111" stroke-width="7.5" stroke-linejoin="round">
+          <rect x="34" y="31" width="56" height="46" rx="13"/>
+          <rect x="110" y="31" width="56" height="46" rx="13"/>
+          <path d="M90 50 Q100 42 110 50"/>
+          <path d="M34 46 L16 40"/><path d="M166 46 L184 40"/>
+        </g>
+        <path d="M42 39 l14 0" stroke="rgba(255,255,255,.75)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M118 39 l14 0" stroke="rgba(255,255,255,.75)" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="34" cy="104" rx="11" ry="6.5" fill="#f29a8e" opacity=".55"/>
+        <ellipse cx="166" cy="104" rx="11" ry="6.5" fill="#f29a8e" opacity=".55"/>
+        <path class="m-smile" d="M52 100 Q100 132 148 100" stroke="#2b4a22" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path class="m-open" d="M58 98 Q100 150 142 98 Q100 112 58 98Z" fill="#9b2a2a" stroke="#2b4a22" stroke-width="4"/>
+        <g class="m-zip" stroke="#2b4a22" stroke-width="4" stroke-linecap="round">
+          <path d="M62 108 L138 108"/><path d="M72 102v12M86 102v12M100 102v12M114 102v12M128 102v12"/>
+        </g>
+      </g>
+    </svg>`;
+
+    // 小手表（秒针会走）
+    ART.watch = (cls = "") => `<svg viewBox="0 0 40 40" class="watch ${cls}">
+      <rect x="13" y="0" width="14" height="10" rx="2" fill="#6b4a2b"/><rect x="13" y="30" width="14" height="10" rx="2" fill="#6b4a2b"/>
+      <circle cx="20" cy="20" r="13" fill="#d9b44a" stroke="#8a6a1a" stroke-width="2"/>
+      <circle cx="20" cy="20" r="10" fill="#fffaf0"/>
+      <g stroke="#555" stroke-width="1.2"><path d="M20 11v2M20 27v2M11 20h2M27 20h2"/></g>
+      <path d="M20 20 L20 14" stroke="#1d1a15" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M20 20 L24.5 22" stroke="#1d1a15" stroke-width="1.6" stroke-linecap="round"/>
+      <path class="sec" d="M20 22 L20 11.5" stroke="#c0262c" stroke-width="1" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="1.4" fill="#c0262c"/>
+    </svg>`;
+
+    // 西方记者：风衣、PRESS 牌、话筒，会跑
+    ART.reporter = `<svg viewBox="0 0 120 160" class="reporter-svg">
+      <ellipse cx="60" cy="156" rx="34" ry="4" fill="rgba(0,0,0,.18)"/>
+      <g class="leg-a"><path d="M52 104 L44 150" stroke="#2f3a4a" stroke-width="11" stroke-linecap="round"/><ellipse cx="40" cy="151" rx="9" ry="4.5" fill="#222"/></g>
+      <g class="leg-b"><path d="M68 104 L76 150" stroke="#3a4658" stroke-width="11" stroke-linecap="round"/><ellipse cx="80" cy="151" rx="9" ry="4.5" fill="#222"/></g>
+      <path d="M38 58 Q60 48 82 58 L88 112 Q60 120 32 112Z" fill="#c9a66b" stroke="#8a6d3c" stroke-width="2"/>
+      <path d="M60 54 L60 114" stroke="#8a6d3c" stroke-width="2"/>
+      <path d="M52 56 L60 70 L68 56" fill="#fff" stroke="#8a6d3c" stroke-width="1.5"/>
+      <path d="M60 64 L57 78 L60 82 L63 78Z" fill="#a50f15"/>
+      <rect x="66" y="76" width="18" height="11" rx="1.5" fill="#fff" stroke="#333" stroke-width="1"/>
+      <text x="75" y="84.2" font-size="5.6" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="#a50f15">PRESS</text>
+      <g class="arm"><path d="M80 64 Q98 66 104 50" stroke="#c9a66b" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <rect x="100" y="30" width="6" height="22" rx="2" fill="#333" transform="rotate(20 103 41)"/>
+        <circle cx="108" cy="28" r="8" fill="#2a2a2a"/><rect x="101" y="33" width="10" height="5" rx="1" fill="#c0262c" transform="rotate(20 106 35)"/></g>
+      <path d="M40 64 Q26 80 30 96" stroke="#c9a66b" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <circle cx="60" cy="34" r="18" fill="#f3c9a4"/>
+      <path d="M42 30 Q44 12 62 14 Q78 14 79 30 Q70 22 58 24 Q48 24 42 30Z" fill="#d9a441"/>
+      <circle cx="54" cy="35" r="2.2" fill="#222"/><circle cx="68" cy="35" r="2.2" fill="#222"/>
+      <ellipse cx="61" cy="45" rx="5" ry="3.5" fill="#7a2b2b"/>
+      <ellipse cx="48" cy="41" rx="3.5" ry="2" fill="#f29a8e" opacity=".6"/><ellipse cx="74" cy="41" rx="3.5" ry="2" fill="#f29a8e" opacity=".6"/>
+    </svg>`;
+
+    // 商店图标
+    const I = (body) => `<svg viewBox="0 0 40 40">${body}</svg>`;
+    ART.icons = {
+      hk_reporter: I(`<rect x="17" y="17" width="6" height="19" rx="2" fill="#333"/><circle cx="20" cy="12" r="9" fill="#2a2a2a"/>
+        <path d="M13 10h14M12 13h16" stroke="#555" stroke-width="1"/><rect x="14" y="19" width="12" height="7" rx="1" fill="#c0262c"/>
+        <text x="20" y="24.6" font-size="4.6" font-family="Arial" font-weight="700" text-anchor="middle" fill="#fff">PRESS</text>`),
+      wallace: I(`<rect x="3" y="9" width="34" height="22" rx="3" fill="#2b2b2b"/><rect x="7" y="13" width="26" height="10" rx="2" fill="#e9dfc6"/>
+        <circle cx="13" cy="18" r="3.4" fill="#2b2b2b"/><circle cx="27" cy="18" r="3.4" fill="#2b2b2b"/>
+        <rect x="11" y="26" width="18" height="3" rx="1" fill="#a50f15"/>`),
+      three_tables: "",
+      quotes: I(`<path d="M6 16h7l14-8v24l-14-8H6z" fill="#a50f15"/><rect x="9" y="24" width="5" height="9" rx="1" fill="#7b0b11"/>
+        <path d="M31 13q4 7 0 14M34 10q6 10 0 20" stroke="#a50f15" stroke-width="2.4" fill="none" stroke-linecap="round"/>`),
+      studio: I(`<rect x="4" y="11" width="22" height="15" rx="2" fill="#333"/><path d="M26 15l9-5v17l-9-5z" fill="#555"/>
+        <circle cx="11" cy="8" r="4" fill="#555"/><circle cx="20" cy="8" r="4" fill="#555"/><circle cx="12" cy="18.5" r="2.5" fill="#c0262c"/>
+        <path d="M15 26l-6 11M15 26l6 11M15 26v11" stroke="#555" stroke-width="2"/>`),
+      world_tour: I(`<circle cx="18" cy="21" r="14" fill="#5aa4d6"/><path d="M10 13q5 3 4 8t5 5q2 4-1 8M22 8q-2 5 3 7t7 1" fill="none" stroke="#3f8f3a" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M27 6l9 4-2 2-6-1-2 3h-2l1-4-3-2z" fill="#fff" stroke="#333" stroke-width="1"/>`),
+      history_engine: I(`<rect x="4" y="16" width="22" height="12" rx="2" fill="#2f3a4a"/><rect x="20" y="9" width="12" height="19" rx="2" fill="#a50f15"/>
+        <rect x="8" y="10" width="5" height="7" fill="#2f3a4a"/><path d="M8 9q-2-5 3-6q2-3 5 0" fill="none" stroke="#999" stroke-width="2"/>
+        <circle cx="10" cy="31" r="4.5" fill="#222"/><circle cx="25" cy="31" r="4.5" fill="#222"/><rect x="23" y="12" width="6" height="5" fill="#ffe7a3"/>`),
+      cosmos: I(`<path d="M20 3q9 8 7 22h-14q-2-14 7-22z" fill="#eee" stroke="#555" stroke-width="1.5"/><circle cx="20" cy="15" r="3.5" fill="#5aa4d6" stroke="#555"/>
+        <path d="M13 22l-6 8h7zM27 22l6 8h-7z" fill="#a50f15"/><path d="M16 26l4 11 4-11z" fill="#f2a10c"/>`),
+      red_boy: I(`<path d="M12 6l-9 6 4 7 4-2v18h18V17l4 2 4-7-9-6q-4 4-8 0z" fill="#c0262c" stroke="#7b0b11" stroke-width="1.5"/>`),
+      duck_pen: I(`<rect x="17" y="2" width="6" height="22" rx="2" fill="#2b2b2b"/><rect x="16" y="20" width="8" height="4" fill="#c9a66b"/>
+        <path d="M16 24h8l-1 10q-3 3-6 0z" fill="#e8a800" stroke="#8a6a1a" stroke-width="1.2"/><path d="M20 26v9" stroke="#8a6a1a" stroke-width="1"/>`),
+      hawaii_guitar: I(`<circle cx="15" cy="27" r="9" fill="#c8823a"/><circle cx="22" cy="20" r="7" fill="#c8823a"/><circle cx="16" cy="26" r="3" fill="#5a3410"/>
+        <path d="M22 20L35 5" stroke="#5a3410" stroke-width="3.5" stroke-linecap="round"/><path d="M12 31l12-14" stroke="#f5e1b0" stroke-width=".8"/>
+        <path d="M4 10q4-5 8 0q-4 4-8 0" fill="#e85b8a"/>`),
+      basic_law: I(`<rect x="7" y="4" width="26" height="32" rx="2" fill="#a50f15"/><rect x="10" y="4" width="2" height="32" fill="#7b0b11"/>
+        <rect x="15" y="10" width="14" height="8" rx="1" fill="#e8c770"/><path d="M15 23h14M15 27h10" stroke="#e8c770" stroke-width="1.6"/>`),
+      glasses: I(`<g fill="none" stroke="#111" stroke-width="3.2"><rect x="3" y="13" width="15" height="12" rx="4"/><rect x="22" y="13" width="15" height="12" rx="4"/><path d="M18 18q2-2 4 0"/></g>`),
+      mic: null, zip: I(`<circle cx="20" cy="20" r="16" fill="#6cc05a"/><path d="M10 22h20" stroke="#2b4a22" stroke-width="2.4"/><path d="M13 19v6M17 19v6M21 19v6M25 19v6" stroke="#2b4a22" stroke-width="1.6"/>`),
+      scroll: I(`<rect x="8" y="8" width="24" height="24" fill="#f3e2b5" stroke="#8a6d3c"/><rect x="5" y="5" width="30" height="5" rx="2.5" fill="#8a6d3c"/><rect x="5" y="30" width="30" height="5" rx="2.5" fill="#8a6d3c"/><path d="M14 15h12M14 20h12M14 25h8" stroke="#8a6d3c" stroke-width="1.4"/>`),
+      stars3: I(`<path id="st" d="M20 4l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#e8a800"/><use href="#st" transform="translate(-11 14) scale(.8)"/><use href="#st" transform="translate(15 14) scale(.8)"/>`),
+      hourglass: I(`<path d="M10 4h20M10 36h20M12 4q0 12 8 16q8-4 8-16M12 36q0-12 8-16q8 4 8 16" fill="#f3e2b5" stroke="#6b4a2b" stroke-width="2"/><path d="M15 33q5-6 10 0z" fill="#d9a441"/>`),
+      bulb: I(`<path d="M20 4a11 11 0 0 1 6 20v4h-12v-4a11 11 0 0 1 6-20z" fill="#ffe27a" stroke="#8a6a1a" stroke-width="1.5"/><rect x="14" y="30" width="12" height="5" rx="1" fill="#888"/>`),
+      locked: I(`<circle cx="20" cy="20" r="16" fill="rgba(0,0,0,.12)"/><text x="20" y="27" font-size="20" font-weight="700" text-anchor="middle" fill="rgba(0,0,0,.45)">?</text>`),
+    };
+    ART.icons.three_tables = I([[-3, -3], [15, -3], [6, 15]].map(([x, y]) =>
+      `<g transform="translate(${x} ${y}) scale(.6)">${ART.watch().replace(/<\/?svg[^>]*>/g, "")}</g>`).join(""));
+    ART.icons.mic = ART.icons.hk_reporter;
+    ART.projectIcon = {
+      glasses: "glasses", interview: "mic", life_exp: "hourglass", faster_reporters: "hk_reporter", gouli: "scroll",
+      mensheng: "zip", three_reps: "stars3", speed_pen: "duck_pen", tanxiao: "studio", every_country: "world_tour",
+      fate: "history_engine", excited_forever: "cosmos",
+    };
+    ART.iconFor = (id, kind) => {
+      if (kind.includes("locked")) return ART.icons.locked;
+      if (kind === "project") return ART.icons[ART.projectIcon[id]] || ART.icons.bulb;
+      return ART.icons[id] || ART.icons.bulb;
+    };
+
+    // ---------- 音效：全部 WebAudio 合成 ----------
+    const SFX = (() => {
+      let ctx = null;
+      let on = true;
+      try { on = localStorage.getItem("xuming-sound") !== "off"; } catch (_) {}
+      const ac = () => {
+        if (!on) return null;
+        if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) { return null; } }
+        if (ctx.state === "suspended") ctx.resume();
+        return ctx;
+      };
+      function tone(freq, dur, { type = "sine", vol = 0.08, slide = 0, delay = 0, lp = 0 } = {}) {
+        const c = ac(); if (!c) return;
+        const t0 = c.currentTime + delay;
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = type; o.frequency.setValueAtTime(freq, t0);
+        if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, freq * slide), t0 + dur);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        let node = o;
+        if (lp) { const f = c.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = lp; o.connect(f); node = f; }
+        node.connect(g); g.connect(c.destination);
+        o.start(t0); o.stop(t0 + dur + 0.02);
+      }
+      return {
+        get on() { return on; },
+        toggle() { on = !on; try { localStorage.setItem("xuming-sound", on ? "on" : "off"); } catch (_) {} return on; },
+        click(combo) { tone(520 + Math.min(combo, 50) * 14, 0.07, { type: "triangle", vol: 0.05 }); },
+        croak() { // 蛤！
+          tone(210, 0.09, { type: "sawtooth", vol: 0.07, slide: 0.7, lp: 900 });
+          tone(170, 0.14, { type: "sawtooth", vol: 0.07, slide: 0.6, lp: 800, delay: 0.1 });
+        },
+        tick() { tone(1800, 0.03, { type: "square", vol: 0.02 }); },
+        buy() { tone(660, 0.06, { type: "triangle", vol: 0.05 }); tone(990, 0.08, { type: "triangle", vol: 0.05, delay: 0.05 }); },
+        event() { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.16, { type: "triangle", vol: 0.06, delay: i * 0.07 })); },
+        hawaii() { // 夏威夷滑棒吉他风的上滑
+          [392, 494, 587].forEach((f, i) => tone(f * 0.84, 0.7, { type: "triangle", vol: 0.05, slide: 1.19, delay: i * 0.12 }));
+        },
+        whistle() { tone(900, 0.25, { type: "sine", vol: 0.04, slide: 1.6 }); },
+      };
+    })();
+  </script>
+
   <!-- ================= 界面 ================= -->
   <script>
     let S = newState();
@@ -530,9 +778,9 @@
     function visibleProjects() { return PROJECTS.filter((p) => !has(S, p.id) && p.when(S)); }
 
     function cardHTML(id, kind) {
-      return `<div class="card ${kind}" data-card="${id}">
-        <div class="name"></div><button data-kind="${kind}" data-id="${id}"></button>
-        <div class="desc"></div><div class="sub"></div></div>`;
+      return `<div class="card ${kind}" data-card="${id}"><div class="ic">${ART.iconFor(id, kind)}</div>
+        <div class="body"><div class="name"></div><div class="desc"></div><div class="sub"></div></div>
+        <button data-kind="${kind}" data-id="${id}"></button></div>`;
     }
     function rebuildShop() {
       const projects = visibleProjects(), boosts = visibleBoosts(), gens = visibleGens();
@@ -659,7 +907,7 @@
         const st = STOPS[S.stopsSeen];
         S.stopsSeen += 1;
         log(`【抵达：${st.name}】${st.text}`, "story");
-        if (st.at >= 31557600) toast(`续满${st.name}`, st.text);
+        if (st.at >= 31557600) { toast(`续满${st.name}`, st.text); frogRain(18); SFX.hawaii(); frogSay("+1s", 2000); }
         if (st.at === UNIVERSE && !S.ended) {
           S.ended = true;
           showEnding();
@@ -684,6 +932,10 @@
       const r = ev.currentTarget.getBoundingClientRect();
       const x = ev.clientX || r.left + r.width / 2, y = ev.clientY || r.top + r.height / 2;
       floatText(x, y, `+${fmt(amt)}`, S.combo >= 50 || buffOn(S, "angry", t));
+      SFX.click(S.combo);
+      frogBounce();
+      if (wasSilent) frogSay("……", 900);
+      else if (Math.random() < 0.05) frogSay(pick(FROG_LINES));
       checkStops();
       renderStats();
     });
@@ -704,6 +956,7 @@
         const p = PROJECTS.find((x) => x.id === id);
         if (buyProject(S, id)) {
           log(`【课题完成：${p.name}】${p.story}`, "story");
+          SFX.buy(); frogSay(id === "mensheng" ? "嘘——" : "蛤！", 1200); if (id !== "mensheng") SFX.croak();
           if (id === "interview") scheduleEvent();
           if (id === "fate") toast("历史的行程", "现在可以重开轮回，换取永久倍率");
         }
@@ -713,11 +966,13 @@
         if (n) {
           const def = itemDef(id);
           if (before === 0 && def.flavor) log(def.flavor, "story");
+          if (id === "hawaii_guitar") SFX.hawaii(); else SFX.buy();
           const after = lv(S, id);
           const crossed = DOUBLINGS.filter((d) => d > before && d <= after);
           if (GENS.includes(def) && crossed.length) {
             log(`${def.name} 达到 ${crossed[crossed.length - 1]} 台：产能翻倍！`, "hl");
             floatText(ev.clientX, ev.clientY, "产能翻倍！", true);
+            frogSay("Excited!"); SFX.croak();
           }
           const card = btn.closest(".card");
           card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
@@ -731,13 +986,17 @@
     function scheduleEvent() {
       S.nextEventAt = now() + eventInterval(S, Math.random());
     }
+    const REPORTER_LINES = ["我有一个问题！", "Excuse me!", "请问……", "BBC 的！", "跑得比谁都快", "是不是钦定？"];
     function spawnReporter() {
       if (reporterEl) return;
       const d = document.createElement("div");
-      d.className = "reporter";
-      d.innerHTML = `🙋 记者举手了！<small>快点我，晚了就跑了</small>`;
-      d.style.left = 20 + Math.random() * (window.innerWidth - 240) + "px";
-      d.style.top = 80 + Math.random() * (window.innerHeight - 200) + "px";
+      const rtl = Math.random() < 0.5;
+      d.className = "reporter" + (rtl ? " rtl" : "");
+      d.innerHTML = `<div class="bubble"></div>${ART.reporter}`;
+      d.querySelector(".bubble").textContent = pick(REPORTER_LINES);
+      d.style.top = 70 + Math.random() * Math.max(80, window.innerHeight - 260) + "px";
+      d.style.animationDuration = (has(S, "faster_reporters") ? 7 : 10) + "s";
+      d.title = "西方记者！快点他";
       d.onclick = (ev) => {
         ev.stopPropagation();
         const t = now();
@@ -745,14 +1004,68 @@
         const amt = eventEffect(S, e.id, t);
         if (e.id === "toosimple") S.eventsCaught += 1;
         toast(e.title, amt ? `+${fmt(amt)} 秒` : e.sub);
-        log(`记者提问：「${e.title}」 —— ${amt ? `续命 +${fmt(amt)} 秒` : e.sub}`, "hl");
+        log(`西方记者提问：「${e.title}」 —— ${amt ? `续命 +${fmt(amt)} 秒` : e.sub}`, "hl");
+        SFX.event();
+        frogSay(e.id === "silent" ? "嘘——" : e.title.split(",")[0], 1800);
         d.remove(); reporterEl = null;
         checkStops(); renderStats(); updateShop();
       };
+      d.addEventListener("animationend", (ev) => {
+        if (ev.target === d && reporterEl === d) { d.remove(); reporterEl = null; log("记者跑掉了。你们啊，还是要提高反应速度。"); }
+      });
       document.body.appendChild(d);
       reporterEl = d;
-      setTimeout(() => { if (reporterEl === d) { d.remove(); reporterEl = null; } }, 13000);
+      SFX.whistle();
     }
+
+    // ---------- 吉祥物 ----------
+    const FROG_LINES = ["蛤！", "+1s", "Excited!", "图样图森破", "naive!", "续一秒", "谈笑风生", "很惭愧", "苟……"];
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    let sayTimer = 0;
+    function frogSay(text, ms = 1300) {
+      const el = $("say");
+      el.textContent = text;
+      el.classList.add("show");
+      $("frog").classList.add("talk");
+      clearTimeout(sayTimer);
+      sayTimer = setTimeout(() => { el.classList.remove("show"); $("frog").classList.remove("talk"); }, ms);
+    }
+    function frogBounce() {
+      const f = $("frog");
+      f.classList.remove("bounce"); void f.offsetWidth; f.classList.add("bounce");
+    }
+    let frogMood = "";
+    function updateFrogMood() {
+      const t = now();
+      const mood = buffOn(S, "angry", t) ? "angry"
+        : buffOn(S, "silent", t) ? "silent"
+        : (buffOn(S, "excited", t) || S.combo >= 40) ? "excited"
+        : isSilent(S, t) ? "silent" : "";
+      if (mood === frogMood) return;
+      const f = $("frog");
+      if (frogMood) f.classList.remove(frogMood);
+      if (mood) f.classList.add(mood);
+      frogMood = mood;
+    }
+    function frogRain(n) {
+      for (let i = 0; i < n; i++) {
+        const d = document.createElement("div");
+        d.className = "rain";
+        d.innerHTML = ART.frog;
+        d.style.left = Math.random() * 100 + "vw";
+        d.style.width = 28 + Math.random() * 30 + "px";
+        d.style.animationDuration = 1.8 + Math.random() * 1.8 + "s";
+        d.style.animationDelay = Math.random() * 0.8 + "s";
+        d.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 4500);
+      }
+    }
+    $("frog").insertAdjacentHTML("afterbegin", ART.frog);
+    $("watches").innerHTML = ART.watch("w1") + ART.watch("w2") + ART.watch("w3");
+    $("frog").addEventListener("click", () => { frogBounce(); SFX.croak(); frogSay(pick(FROG_LINES)); });
+    $("soundBtn").textContent = SFX.on ? "🔊 音效" : "🔇 静音";
+    $("soundBtn").addEventListener("click", () => { $("soundBtn").textContent = SFX.toggle() ? "🔊 音效" : "🔇 静音"; });
 
     // ---------- 存档 ----------
     function serialize() { return JSON.stringify({ ...S, savedAt: Date.now() }); }
@@ -822,6 +1135,7 @@
           shopSig = "";
           log(`【第 ${S.runs} 轮】历史的行程向前推进了。现在一切从头，但你已经不一样了。`, "story");
           toast(`第 ${S.runs} 轮`, `全局倍率 ×${historyMul(S).toFixed(1)}`);
+          frogRain(40); SFX.hawaii();
           rebuildShop(); renderStats(); save();
         } },
       ]);
@@ -842,6 +1156,7 @@
       rebuildShop();
       updateShop();
       renderStats();
+      updateFrogMood();
       if (Date.now() - lastSave > 8000) { save(); lastSave = Date.now(); }
     }
 
